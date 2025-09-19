@@ -8,15 +8,11 @@ let play = document.querySelector("#play");
 let songFolders = {
     "songs/non-copyright": [
         "aaj ki raat.mp3",
-        
         "bijuriya.mp3",
-        
         "die with a smile.mp3",
         "ishq hai.mp3",
-        
-    ],
+        ],
     "songs/copyright": [
-        "hi samindrachi lat.mp3",
         "cherry cherry.mp3",
         "aame jo tomar.mp3",
         "maand.mp3",
@@ -87,7 +83,7 @@ const playMusic = (track, pause = false) => {
                 `${formatTime(currentTime)} / ${formatTime(duration)}`;
             let percent = (currentTime / duration) * 100;
             document.querySelector(".circle").style.left = percent + "%";
-            document.querySelector(".overed").style.width = percent + "%";
+            document.querySelector(".overed").style.width = percent +1+ "%";
         }
     };
 };
@@ -188,3 +184,4 @@ async function main() {
 }
 
 main();
+
