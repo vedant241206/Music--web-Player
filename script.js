@@ -1,25 +1,32 @@
 console.log("hello world");
-let songs = [];  
+let songs = [];
 let curfolder;
 let currentSong = new Audio();
 let play = document.querySelector("#play");
 
+// Hardcoded song lists for deployment compatibility
+let songFolders = {
+    "songs/non-copyright": [
+        "aaj ki raat.mp3",
+        
+        "bijuriya.mp3",
+        
+        "die with a smile.mp3",
+        "ishq hai.mp3",
+        
+    ],
+    "songs/copyright": [
+        "hi samindrachi lat.mp3",
+        "cherry cherry.mp3",
+        "aame jo tomar.mp3",
+        "maand.mp3",
+        "ve haaniyaan.mp3"
+    ]
+};
+
 async function getSongs(folder) {
     curfolder = folder;
-
-    let a = await fetch(`http://127.0.0.1:5500/${folder}/`);
-    let response = await a.text();
-    let div = document.createElement("div");
-    div.innerHTML = response;
-    let as = div.getElementsByTagName("a");
-    songs = []; 
-
-    for (let index = 0; index < as.length; index++) {
-        const element = as[index];
-        if (element.href.endsWith(".mp3")) {
-            songs.push(element.href.split(`/${folder}/`)[1]);
-        }
-    }
+    songs = songFolders[folder] || [];
 
     let songUL = document.querySelector(".songlist ul");
     songUL.innerHTML = "";
@@ -36,14 +43,13 @@ async function getSongs(folder) {
                     <img src="images/play-circle-svgrepo-com.svg" alt="">
                 </span>
             </li>`;
+    }
 
     Array.from(songUL.getElementsByTagName("li")).forEach((li, index) => {
         li.addEventListener("click", () => {
-            playMusic(songs [index]);
+            playMusic(songs[index]);
         });
     });
-
-    }
 
     return songs;
 }
@@ -71,48 +77,45 @@ const playMusic = (track, pause = false) => {
         document.querySelector(".songtime").innerHTML =
             `${formatTime(0)} / ${formatTime(currentSong.duration)}`;
     });
+
+    // Add timeupdate event to update songtime and seekbar
+    currentSong.ontimeupdate = () => {
+        let currentTime = currentSong.currentTime;
+        let duration = currentSong.duration;
+        if (!isNaN(duration)) {
+            document.querySelector(".songtime").innerHTML =
+                `${formatTime(currentTime)} / ${formatTime(duration)}`;
+            let percent = (currentTime / duration) * 100;
+            document.querySelector(".circle").style.left = percent + "%";
+            document.querySelector(".overed").style.width = percent + "%";
+        }
+    };
 };
 
 async function displayAlbums() {
-    let a = await fetch(`http://127.0.0.1:5500/songs/`);
-    let response = await a.text();
-    let div = document.createElement("div");
-    div.innerHTML = response;
-    let anchors=div.getElementsByTagName("a");
-    let cardcontainer=document.querySelector(".cardcontainer")
-    let array=Array.from(anchors);
-    for (let index = 0; index < array.length; index++) {
-        const e = array[index];
-        
-        
-        if(e.href.includes("/songs/")){
-            
-            let folder= e.href.split("/").slice(-2)[1];
-            let a = await fetch(`http://127.0.0.1:5500/songs/${folder}/info.json`);
-            let response = await a.json();  
-            
-            cardcontainer.innerHTML=cardcontainer.innerHTML+`<div data-folder="${folder}" class="card ">
-                        <img src="songs/${folder}/cover.png" alt="">
-                        <div class="playbtn">
-                            <img src="images/play-circle-svgrepo-com.svg" alt="">
-                        </div>
-                        <h2>${response.title}</h2>
-                        <p>${response.description}</p>
-                    </div>`
-        }
+    let cardcontainer = document.querySelector(".cardcontainer");
+    let folders = ["non-copyright", "copyright"];
+
+    for (let folder of folders) {
+        let response = { title: folder === "non-copyright" ? "Non Copy-Right Songs" : "Copy Right Songs", description: "Songs for you" };
+        cardcontainer.innerHTML += `<div data-folder="${folder}" class="card ">
+                    <img src="songs/${folder}/cover.png" alt="">
+                    <div class="playbtn">
+                        <img src="images/play-circle-svgrepo-com.svg" alt="">
+                    </div>
+                    <h2>${response.title}</h2>
+                    <p>${response.description}</p>
+                </div>`;
     }
 
     Array.from(document.getElementsByClassName("card")).forEach(e => {
         e.addEventListener("click", async item => {
             songs = await getSongs(`songs/${item.currentTarget.dataset.folder}`);
-            // document.querySelector.currentTarget(".card").style.setProperty("background-color", "#535050ff");
-
             if (songs.length > 0) {
                 playMusic(songs[0], true);
             }
         });
     });
-    
 }
 
 async function main() {
@@ -148,7 +151,7 @@ async function main() {
     let percent = ((e.clientX - rect.left) / rect.width) * 100;
 
     document.querySelector(".circle").style.left = percent + "%";
-    document.querySelector(".overed").style.width = percent+1 + "%";
+    document.querySelector(".overed").style.width =( percent+2 )+ "%";
     currentSong.currentTime = (percent / 100) * currentSong.duration;
 });
 
