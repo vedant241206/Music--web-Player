@@ -84,6 +84,12 @@ const playMusic = (track, pause = false) => {
             let percent = (currentTime / duration) * 100;
             document.querySelector(".circle").style.left = percent + "%";
             document.querySelector(".overed").style.width = percent +1+ "%";
+            if(currentTime==duration){
+                play.src="images/play.svg";
+            }
+            else{
+                play.src="images/video-pause-svgrepo-com.svg";
+            }
         }
     };
 };
@@ -184,4 +190,5 @@ async function main() {
 }
 
 main();
+
 
