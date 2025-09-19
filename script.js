@@ -19,13 +19,10 @@ currentSong.addEventListener('pause', () => {
 let songFolders = {
     "songs/non-copyright": [
         "aaj ki raat.mp3",
-        
         "bijuriya.mp3",
-        "cherry cherry.mp3",
         "die with a smile.mp3",
         "ishq hai.mp3"
-        
-    ],
+        ],
     "songs/copyright": [
         "aame jo tomar.mp3",
         "cherry cherry.mp3",
@@ -204,4 +201,5 @@ async function main() {
 }
 
 main();
+
 
