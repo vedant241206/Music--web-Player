@@ -69,7 +69,8 @@ function formatTime(seconds) {
 
 const playMusic = (track, pause = false) => {
     currentSong.src = `/${curfolder}/` + track;
-
+    
+        play.src = "images/video-pause-svgrepo-com.svg";
     if (!pause) {
         currentSong.play();
         play.src = "images/video-pause-svgrepo-com.svg";
@@ -200,3 +201,4 @@ async function main() {
 }
 
 main();
+
