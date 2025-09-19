@@ -3,8 +3,10 @@ let songs = [];
 let curfolder;
 let currentSong = new Audio();
 let play = document.querySelector("#play");
+let previous = document.querySelector("#previous");
+let next = document.querySelector("#next");
 
-
+// Add event listeners to update play button icon on play/pause events
 currentSong.addEventListener('play', () => {
     play.src = "images/video-pause-svgrepo-com.svg";
 });
@@ -13,19 +15,19 @@ currentSong.addEventListener('pause', () => {
     play.src = "images/play.svg";
 });
 
+// Hardcoded song lists for deployment compatibility
 let songFolders = {
     "songs/non-copyright": [
         "aaj ki raat.mp3",
-        
+        "aame jo tomar.mp3",
         "bijuriya.mp3",
-        
+        "cherry cherry.mp3",
         "die with a smile.mp3",
-        "ishq hai.mp3"
-        
+        "ishq hai.mp3",
+        "jhol.mp3"
     ],
     "songs/copyright": [
-        "aame jo tomar.mp3",
-        "cherry cherry.mp3",
+        "hi samindrachi lat.mp3",
         "maand.mp3",
         "ve haaniyaan.mp3"
     ]
@@ -69,13 +71,12 @@ function formatTime(seconds) {
 
 const playMusic = (track, pause = false) => {
     currentSong.src = `/${curfolder}/` + track;
-    
-        play.src = "images/video-pause-svgrepo-com.svg";
+
     if (!pause) {
         currentSong.play();
         play.src = "images/video-pause-svgrepo-com.svg";
     } else {
-        play.src = "images/video-pause-svgrepo-com.svg";
+        play.src = "images/play.svg";
     }
 
     document.querySelector(".songinfo").innerHTML =
@@ -86,6 +87,7 @@ const playMusic = (track, pause = false) => {
             `${formatTime(0)} / ${formatTime(currentSong.duration)}`;
     });
 
+    // Add timeupdate event to update songtime and seekbar
     currentSong.ontimeupdate = () => {
         let currentTime = currentSong.currentTime;
         let duration = currentSong.duration;
@@ -96,7 +98,7 @@ const playMusic = (track, pause = false) => {
             document.querySelector(".circle").style.left = percent + "%";
             document.querySelector(".overed").style.width = percent + "%";
         }
-        
+        // Update play button icon based on paused state
         if (currentSong.paused) {
             play.src = "images/play.svg";
         } else {
@@ -201,4 +203,3 @@ async function main() {
 }
 
 main();
-
