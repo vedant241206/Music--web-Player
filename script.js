@@ -4,17 +4,28 @@ let curfolder;
 let currentSong = new Audio();
 let play = document.querySelector("#play");
 
-// Hardcoded song lists for deployment compatibility
+
+currentSong.addEventListener('play', () => {
+    play.src = "images/video-pause-svgrepo-com.svg";
+});
+
+currentSong.addEventListener('pause', () => {
+    play.src = "images/play.svg";
+});
+
 let songFolders = {
     "songs/non-copyright": [
         "aaj ki raat.mp3",
+        
         "bijuriya.mp3",
+        
         "die with a smile.mp3",
-        "ishq hai.mp3",
-        ],
+        "ishq hai.mp3"
+        
+    ],
     "songs/copyright": [
-        "cherry cherry.mp3",
         "aame jo tomar.mp3",
+        "cherry cherry.mp3",
         "maand.mp3",
         "ve haaniyaan.mp3"
     ]
@@ -63,7 +74,7 @@ const playMusic = (track, pause = false) => {
         currentSong.play();
         play.src = "images/video-pause-svgrepo-com.svg";
     } else {
-        play.src = "images/play.svg";
+        play.src = "images/video-pause-svgrepo-com.svg";
     }
 
     document.querySelector(".songinfo").innerHTML =
@@ -74,7 +85,6 @@ const playMusic = (track, pause = false) => {
             `${formatTime(0)} / ${formatTime(currentSong.duration)}`;
     });
 
-    // Add timeupdate event to update songtime and seekbar
     currentSong.ontimeupdate = () => {
         let currentTime = currentSong.currentTime;
         let duration = currentSong.duration;
@@ -83,13 +93,13 @@ const playMusic = (track, pause = false) => {
                 `${formatTime(currentTime)} / ${formatTime(duration)}`;
             let percent = (currentTime / duration) * 100;
             document.querySelector(".circle").style.left = percent + "%";
-            document.querySelector(".overed").style.width = percent +1+ "%";
-            if(currentTime==duration){
-                play.src="images/play.svg";
-            }
-            else{
-                play.src="images/video-pause-svgrepo-com.svg";
-            }
+            document.querySelector(".overed").style.width = percent + "%";
+        }
+        
+        if (currentSong.paused) {
+            play.src = "images/play.svg";
+        } else {
+            play.src = "images/video-pause-svgrepo-com.svg";
         }
     };
 };
@@ -190,5 +200,3 @@ async function main() {
 }
 
 main();
-
-
