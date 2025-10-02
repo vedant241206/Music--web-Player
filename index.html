@@ -84,6 +84,12 @@
 
 
         <script src="script.js"></script>
+<script>
+  // If not logged in, redirect to login.html
+  if (!localStorage.getItem("loggedIn")) {
+    window.location.href = "login.html";
+  }
+</script>
 </body>
 
 </html>
