@@ -13,20 +13,9 @@ let play = document.querySelector("#play");
 
 async function getSongs(folder) {
     curfolder = folder;
-
-    let a = await fetch(`${folder}/`);
-    let response = await a.text();
-    let div = document.createElement("div");
-    div.innerHTML = response;
-    let as = div.getElementsByTagName("a");
-    songs = []; 
-
-    for (let index = 0; index < as.length; index++) {
-        const element = as[index];
-        if (element.href.endsWith(".mp3")) {
-            songs.push(element.href.split(`/${folder}/`)[1]);
-        }
-    }
+    let a = await fetch(`${folder}/info.json`);
+    let response = await a.json();
+    songs = response.songs;
 
     let songUL = document.querySelector(".songlist ul");
     songUL.innerHTML = "";
@@ -43,14 +32,13 @@ async function getSongs(folder) {
                     <img src="images/play-circle-svgrepo-com.svg" alt="">
                 </span>
             </li>`;
+    }
 
     Array.from(songUL.getElementsByTagName("li")).forEach((li, index) => {
         li.addEventListener("click", () => {
-            playMusic(songs [index]);
+            playMusic(songs[index]);
         });
     });
-
-    }
 
     return songs;
 }
