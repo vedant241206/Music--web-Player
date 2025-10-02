@@ -78,7 +78,8 @@ body {
 }
 
 .header {
-    display: flex;
+    display: none;
+    
     justify-content: space-between;
     background-color: rgb(34, 34, 34);
     border-radius: 10px;
@@ -133,7 +134,7 @@ body {
 .cardcontainer .card:hover .playbtn {
     opacity: 1;
     transform: translateY(0px);
-    /* transition:all 0.5s ease-in-out; */
+    
 
 }
 
@@ -363,6 +364,9 @@ body {
         display: block;
     }
 
+    .header{
+        display: block;
+    }
     .hamburger {
         display: block;
     }
