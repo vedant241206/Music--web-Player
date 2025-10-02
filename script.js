@@ -72,44 +72,33 @@ const playMusic = (track, pause = false) => {
 
 
 async function displayAlbums() {
-    let a = await fetch(`songs/`);
-    let response = await a.text();
-    let div = document.createElement("div");
-    div.innerHTML = response;
-    let anchors=div.getElementsByTagName("a");
-    let cardcontainer=document.querySelector(".cardcontainer")
-    let array=Array.from(anchors);
-    for (let index = 0; index < array.length; index++) {
-        const e = array[index];
+    let a = await fetch("songs/albums.json");
+    let albums = await a.json();
+    let cardcontainer = document.querySelector(".cardcontainer");
+    cardcontainer.innerHTML = "";
+    for (const album of albums) {
         
-        
-        if(e.href.includes("/songs/")){
-            
-            let folder= e.href.split("/").slice(-2)[1];
-            let a = await fetch(`songs/${folder}/info.json`);
-            let response = await a.json();  
-            
-            cardcontainer.innerHTML=cardcontainer.innerHTML+`<div data-folder="${folder}" class="card ">
-                        <img src="songs/${folder}/cover.png" alt="">
-                        <div class="playbtn">
-                            <img src="images/play-circle-svgrepo-com.svg" alt="">
-                        </div>
-                        <h2>${response.title}</h2>
-                        <p>${response.description}</p>
-                    </div>`
-        }
+        let info = await fetch(`songs/${album.folder}/info.json`).then(r => r.json());
+        cardcontainer.innerHTML += `
+            <div data-folder="${album.folder}" class="card">
+                <img src="songs/${album.folder}/cover.png" alt="">
+                <div class="playbtn">
+                    <img src="images/play-circle-svgrepo-com.svg" alt="">
+                </div>
+                <h2>${info.title}</h2>
+                <p>${info.description}</p>
+            </div>
+        `;
     }
 
     Array.from(document.getElementsByClassName("card")).forEach(e => {
         e.addEventListener("click", async item => {
             songs = await getSongs(`songs/${item.currentTarget.dataset.folder}`);
-           
             if (songs.length > 0) {
                 playMusic(songs[0], true);
             }
         });
     });
-    
 }
 
 async function main() {
