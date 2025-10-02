@@ -10,6 +10,7 @@ currentSong.addEventListener("timeupdate", () => {
         `${formatTime(currentSong.currentTime)} / ${formatTime(currentSong.duration)}`;
 });
 let play = document.querySelector("#play");
+let currentSongIndex = 0;
 
 async function getSongs(folder) {
     curfolder = folder;
@@ -36,7 +37,7 @@ async function getSongs(folder) {
 
     Array.from(songUL.getElementsByTagName("li")).forEach((li, index) => {
         li.addEventListener("click", () => {
-            playMusic(songs[index]);
+            playMusic(songs[index], false, index);
         });
     });
 
@@ -49,14 +50,14 @@ function formatTime(seconds) {
     return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
 }
 
-const playMusic = (track, pause = false) => {
+const playMusic = (track, pause = false, index = 0) => {
+    currentSongIndex = index;
     currentSong.src = `/${curfolder}/` + track;
     document.querySelector(".overed").style.width = "0%";
     document.querySelector(".circle").style.left = "0%";
     if (!pause) {
         currentSong.play();
         play.src = "images/video-pause-svgrepo-com.svg";
-        
     } else {
         play.src = "images/play.svg";
     }
@@ -149,25 +150,20 @@ async function main() {
         });
 
     previous.addEventListener("click", e => {
-        let index = songs.indexOf(currentSong.src.split("/").slice(-1)[0]);
-        if ((index - 1) >= 0) {
-            playMusic(songs[index - 1]);
-
-        }
-        else {
+        if ((currentSongIndex - 1) >= 0) {
+            playMusic(songs[currentSongIndex - 1], false, currentSongIndex - 1);
+        } else {
             alert("first song");
-
         }
-    })
+    });
 
     next.addEventListener("click", () => {
-        let index = songs.indexOf(currentSong.src.split("/").slice(-1)[0]);
-        if ((index + 1) < songs.length) {
-            playMusic(songs[index + 1]);
-
+        if ((currentSongIndex + 1) < songs.length) {
+            playMusic(songs[currentSongIndex + 1], false, currentSongIndex + 1);
+        } else {
+            alert("last song");
         }
-        else { alert("last song"); }
-    })
+    });
 }
 
 main();
