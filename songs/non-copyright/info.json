@@ -1,4 +1,10 @@
 {
     "title":"Non Copy-Right Songs",
-    "description":"Songs for you"
+    "description":"Songs for you",
+    "songs":[
+        "aaj ki raat.mp3",
+        "bijuriya.mp3",
+        "die with a smile.mp3",
+        "ishq hai.mp3"
+    ]
 }
