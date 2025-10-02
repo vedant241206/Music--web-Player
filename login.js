@@ -9,9 +9,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
         return;
     }
 
-    
-    else { 
-        
-        window.location.href = 'index.html'; 
-    }
+    // After successful login
+    localStorage.setItem("loggedIn", "yes");
+    window.location.href = "index.html";
 });
