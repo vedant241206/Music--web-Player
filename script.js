@@ -77,7 +77,7 @@ async function displayAlbums() {
     let cardcontainer = document.querySelector(".cardcontainer");
     cardcontainer.innerHTML = "";
     for (const album of albums) {
-        
+        // Fetch album info for cover image
         let info = await fetch(`songs/${album.folder}/info.json`).then(r => r.json());
         cardcontainer.innerHTML += `
             <div data-folder="${album.folder}" class="card">
